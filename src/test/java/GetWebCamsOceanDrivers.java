@@ -2,22 +2,36 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GetWebCamsOceanDrivers {
+    private final String NAME = "Cala Agulla";
+
     @Test
-    public void testGetWebCams() throws IOException {
-        HttpGet request=new HttpGet("http://api.oceandrivers.com/v1.0/getWebCams/");
+    public void testGetWebCams() throws IOException, ParseException {
+        HttpGet request = new HttpGet("http://api.oceandrivers.com/v1.0/getWebCams/");
         CloseableHttpResponse response = HttpClientBuilder.create().build().execute(request);
+        String entity = EntityUtils.toString(response.getEntity());
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = (JSONArray) parser.parse(entity);
+        List<String> namesList = new ArrayList<>();
+        for (Object jsonObject : jsonArray) {
+            namesList.add(((JSONObject) jsonObject).get("name").toString());
+        }
         assertEquals(200, response.getStatusLine().getStatusCode());
-        System.out.println(EntityUtils.toString(response.getEntity()));
-
-
-
+        assertTrue(namesList.contains(NAME));
     }
-
 }
+
+
