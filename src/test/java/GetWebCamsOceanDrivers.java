@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GetWebCamsOceanDrivers {
     private final String NAME = "Cala Agulla";
+    private final String KEY="name";
 
     @Test
     public void testGetWebCams() throws IOException, ParseException {
@@ -27,7 +28,7 @@ public class GetWebCamsOceanDrivers {
         JSONArray jsonArray = (JSONArray) parser.parse(entity);
         List<String> namesList = new ArrayList<>();
         for (Object jsonObject : jsonArray) {
-            namesList.add(((JSONObject) jsonObject).get("name").toString());
+            namesList.add(((JSONObject) jsonObject).get(KEY).toString());
         }
         assertEquals(200, response.getStatusLine().getStatusCode());
         assertTrue(namesList.contains(NAME));
