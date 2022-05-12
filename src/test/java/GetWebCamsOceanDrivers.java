@@ -21,8 +21,7 @@ public class GetWebCamsOceanDrivers {
     public void testGetWebCams() throws IOException {
         HttpGet request = new HttpGet("http://api.oceandrivers.com/v1.0/getWebCams/");
         CloseableHttpResponse response = HttpClientBuilder.create().build().execute(request);
-        String entity = EntityUtils.toString(response.getEntity());
-        JSONArray jsonArray = new JSONArray(entity);
+        JSONArray jsonArray = new JSONArray(EntityUtils.toString(response.getEntity()));
         List<String> namesList = new ArrayList<>();
         for (Object jsonObject : jsonArray) {
             namesList.add(((JSONObject) jsonObject).getString(KEY));
